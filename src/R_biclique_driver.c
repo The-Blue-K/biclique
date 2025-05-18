@@ -52,8 +52,8 @@ void maximal_biclique(BiGraph *G, num_t *profile, num_t **g_right, num_t **g_lef
     * 1st element of nnr/nnl is the totoal number of bicliques
     * other elements of nnr/nnl are the totoal number of nodes in each biclique
     */
-    nnr = (num_t *) Calloc ((n2 * n1 + 1), num_t);
-    nnl = (num_t *) Calloc ((n2 * n1 + 1), num_t);
+    nnr = (num_t *) calloc ((n2 * n1 + 1), sizeof(num_t));
+    nnl = (num_t *) calloc ((n2 * n1 + 1), sizeof(num_t));
     vid_t cand[n2];
     unsigned int i;
 
@@ -115,15 +115,15 @@ SEXP R_biclique(SEXP R_file, SEXP R_left_least, SEXP R_right_least, SEXP R_degre
     }
     else {
         SEXP profile_data;
-        num_t *profile = (num_t *) Calloc((3*(n1 * n2) + 9), num_t);
+        num_t *profile = (num_t *) calloc((3*(n1 * n2) + 9), sizeof(num_t));
         SEXP R_biclique_right, R_biclique_left;
         R_data = PROTECT(allocVector(VECSXP, 3));
 
         /*
         * Allocate memory for g_right and g_left. Biclique nodes in them.
         */
-        num_t **g_right = (num_t **) Calloc(n2 * n1, num_t*);
-        num_t **g_left = (num_t **) Calloc(n2 * n1, num_t*);
+        num_t **g_right = (num_t **) calloc(n2 * n1, sizeof(num_t*));
+        num_t **g_left = (num_t **) calloc(n2 * n1, sizeof(num_t*));
 
         maximal_biclique(G, profile, g_right, g_left);
 
@@ -161,22 +161,22 @@ SEXP R_biclique(SEXP R_file, SEXP R_left_least, SEXP R_right_least, SEXP R_degre
         UNPROTECT(2);
         // free memory
         for (i = 0; i < nnr[0]; i++) {
-            Free(g_right[i]);
+            free(g_right[i]);
             
         }
         for (i = 0; i < nnl[0]; i++) {
-            Free(g_left[i]);
+            free(g_left[i]);
         }
-        Free(g_right);
-        Free(g_left);
-        Free(nnr);
-        Free(nnl);
+        free(g_right);
+        free(g_left);
+        free(nnr);
+        free(nnl);
 
         newRptr(profile, profile_data, finalizer0);
         // Add profile to the R_data list
         SET_VECTOR_ELT(R_data, 2, copy_data (profile_data));
         UNPROTECT(1);
-        Free(profile);
+        free(profile);
         UNPROTECT(1);
     }
     return R_data;
