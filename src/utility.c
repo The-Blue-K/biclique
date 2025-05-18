@@ -16,7 +16,7 @@ Set *make_set(unsigned int set_size)
     Set *S;
     int num_ints;
 
-    S = (Set *) Calloc(1, Set);
+    S = (Set *) calloc(1, Set);
     if (S == NULL) { 
         error("malloc");
     }
@@ -24,7 +24,7 @@ Set *make_set(unsigned int set_size)
     S->_num_elements = 0;
     num_ints = set_size / (sizeof(unsigned int) * CHAR_BITS);
     if ((set_size % (sizeof(unsigned int) * CHAR_BITS)) != 0) num_ints++;
-    S->_set = (unsigned int *) Calloc(num_ints, unsigned int);
+    S->_set = (unsigned int *) calloc(num_ints, unsigned int);
     if (S->_set == NULL) { 
         error("malloc");
     }
@@ -101,12 +101,12 @@ Mapping *make_mapping(unsigned int size)
 {
     Mapping *M;
     int i;
-    M = (Mapping *) Calloc(1, Mapping);
+    M = (Mapping *) calloc(1, Mapping);
     if (M == NULL) { 
         error("malloc");
     }
     M->_size = size;
-    M->_mapping = (short *) Calloc(size, short);
+    M->_mapping = (short *) calloc(size, short);
     if (M == NULL) { 
         error("malloc");
     }
@@ -189,23 +189,23 @@ double get_cur_time() {
 Memory *memory_make(size_t num_bytes)
 {
     Memory *M;
-    M = (Memory *) Calloc(1, Memory);
+    M = (Memory *) calloc(1, Memory);
     if (M == NULL) { 
         error("malloc");
     }
     M->_num_bytes = num_bytes;
     M->_num_chunk = 1;
     M->_cur_chunk = 0;
-    M->_head = (unsigned char **) Calloc(MAX_NUM_CHUNK, unsigned char*);
+    M->_head = (unsigned char **) calloc(MAX_NUM_CHUNK, unsigned char*);
     if (M->_head == NULL) { 
         error("calloc");
     }
-    M->_head[0] = (unsigned char *) Calloc(num_bytes, unsigned char);
+    M->_head[0] = (unsigned char *) calloc(num_bytes, unsigned char);
     if (M->_head[0] == NULL) { 
         error("malloc");
     }
     M->_sbrk = M->_head[0];
-    M->_tail = (unsigned char **) Calloc(MAX_NUM_CHUNK, unsigned char*);
+    M->_tail = (unsigned char **) calloc(MAX_NUM_CHUNK, unsigned char*);
     if (M->_tail == NULL) { 
         error("calloc");
     }
@@ -231,7 +231,7 @@ int memory_malloc_chunk(Memory *M)
     if (M->_num_chunk == MAX_NUM_CHUNK) return -1;
     M->_num_chunk++;
     M->_cur_chunk++;
-    M->_head[M->_cur_chunk] = (unsigned char *) Calloc(M->_num_bytes, unsigned char);
+    M->_head[M->_cur_chunk] = (unsigned char *) calloc(M->_num_bytes, unsigned char);
     if (M->_head[M->_cur_chunk] == NULL) { 
         error("malloc");
     }
