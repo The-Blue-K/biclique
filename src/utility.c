@@ -16,7 +16,7 @@ Set *make_set(unsigned int set_size)
     Set *S;
     int num_ints;
 
-    S = (Set *) calloc(1, Set);
+    S = (Set *) calloc(1, sizeof(Set));
     if (S == NULL) { 
         error("malloc");
     }
@@ -24,7 +24,7 @@ Set *make_set(unsigned int set_size)
     S->_num_elements = 0;
     num_ints = set_size / (sizeof(unsigned int) * CHAR_BITS);
     if ((set_size % (sizeof(unsigned int) * CHAR_BITS)) != 0) num_ints++;
-    S->_set = (unsigned int *) calloc(num_ints, unsigned int);
+    S->_set = (unsigned int *) calloc(num_ints, sizeof(unsigned int));
     if (S->_set == NULL) { 
         error("malloc");
     }
@@ -33,12 +33,12 @@ Set *make_set(unsigned int set_size)
     return S;
 }
 
-/* Free memory of a set */
+/* free memory of a set */
 void free_set(Set *S)
 {
     if (S != NULL) {
-        if (S->_set) Free(S->_set);
-        Free(S);
+        if (S->_set) free(S->_set);
+        free(S);
     }
 }
 
@@ -101,12 +101,12 @@ Mapping *make_mapping(unsigned int size)
 {
     Mapping *M;
     int i;
-    M = (Mapping *) calloc(1, Mapping);
+    M = (Mapping *) calloc(1, sizeof(Mapping));
     if (M == NULL) { 
         error("malloc");
     }
     M->_size = size;
-    M->_mapping = (short *) calloc(size, short);
+    M->_mapping = (short *) calloc(size, sizeof(short));
     if (M == NULL) { 
         error("malloc");
     }
@@ -115,12 +115,12 @@ Mapping *make_mapping(unsigned int size)
     return M;
 }
 
-/* Free memory of a mapping */
+/* free memory of a mapping */
 void free_mapping(Mapping *M)
 {
     if (M != NULL) {
-        if (M->_mapping) Free(M->_mapping);
-        Free(M);
+        if (M->_mapping) free(M->_mapping);
+        free(M);
     }
 }
 
@@ -189,23 +189,23 @@ double get_cur_time() {
 Memory *memory_make(size_t num_bytes)
 {
     Memory *M;
-    M = (Memory *) calloc(1, Memory);
+    M = (Memory *) calloc(1, sizeof(Memory));
     if (M == NULL) { 
         error("malloc");
     }
     M->_num_bytes = num_bytes;
     M->_num_chunk = 1;
     M->_cur_chunk = 0;
-    M->_head = (unsigned char **) calloc(MAX_NUM_CHUNK, unsigned char*);
+    M->_head = (unsigned char **) calloc(MAX_NUM_CHUNK, sizeof(unsigned char*));
     if (M->_head == NULL) { 
         error("calloc");
     }
-    M->_head[0] = (unsigned char *) calloc(num_bytes, unsigned char);
+    M->_head[0] = (unsigned char *) calloc(num_bytes, sizeof(unsigned char));
     if (M->_head[0] == NULL) { 
         error("malloc");
     }
     M->_sbrk = M->_head[0];
-    M->_tail = (unsigned char **) calloc(MAX_NUM_CHUNK, unsigned char*);
+    M->_tail = (unsigned char **) calloc(MAX_NUM_CHUNK, sizeof(unsigned char*));
     if (M->_tail == NULL) { 
         error("calloc");
     }
@@ -213,16 +213,16 @@ Memory *memory_make(size_t num_bytes)
     return M;
 }
 
-/* Free the memory */
+/* free the memory */
 void memory_free(Memory *M)
 {
     int i;  
     if (M == NULL) return;
     for (i = 0; i < M->_num_chunk; i++)
-        if (M->_head[i]) Free(M->_head[i]);
-    Free(M->_head);
-    Free(M->_tail);
-    Free(M);
+        if (M->_head[i]) free(M->_head[i]);
+    free(M->_head);
+    free(M->_tail);
+    free(M);
 }
 
 /* Malloc one more memory chunk */
@@ -231,7 +231,7 @@ int memory_malloc_chunk(Memory *M)
     if (M->_num_chunk == MAX_NUM_CHUNK) return -1;
     M->_num_chunk++;
     M->_cur_chunk++;
-    M->_head[M->_cur_chunk] = (unsigned char *) calloc(M->_num_bytes, unsigned char);
+    M->_head[M->_cur_chunk] = (unsigned char *) calloc(M->_num_bytes, sizeof(unsigned char));
     if (M->_head[M->_cur_chunk] == NULL) { 
         error("malloc");
     }
@@ -246,7 +246,7 @@ void memory_reset(Memory *M)
     int i;
     for (i = M->_cur_chunk+1; i < M->_num_chunk; i++) {
     if (M->_head[i]) {
-        Free(M->_head[i]);
+        free(M->_head[i]);
         M->_head[i] = NULL;
         M->_tail[i] = NULL;
         }
