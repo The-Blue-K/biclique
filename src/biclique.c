@@ -76,13 +76,13 @@ void biclique_out(num_t **g_right, num_t **g_left, BiGraph *G, vid_t *right, \
     unsigned int i;
 
     //*g_right = (int *) R_alloc(nr, sizeof(int));
-    *g_right = (num_t *) Calloc(nr, num_t);
+    *g_right = (num_t *) calloc(nr, sizeof(num_t));
     for (i = 0; i < nr; i++) {
         (*g_right)[i] = right[i];
     }
 
     //*g_left = (int *) R_alloc(nl, sizeof(int));
-    *g_left = (num_t *) Calloc(nl, num_t);
+    *g_left = (num_t *) calloc(nl, sizeof(num_t));
      for (i = 0; i < nl; i++) {
         (*g_left)[i] = left[i];
     }
@@ -365,7 +365,7 @@ void biclique_enumerate(num_t **g_right, num_t **g_left, num_t *profile, BiGraph
     int noc[n2], tmpnoc, x;
     
     /* Initialization */
-    nclique = (num_t *) Calloc(n1*n2, num_t);
+    nclique = (num_t *) calloc(n1*n2, sizeof(num_t));
     if (!nclique) { 
         error("malloc nclique");
     }
@@ -401,7 +401,7 @@ void biclique_enumerate(num_t **g_right, num_t **g_left, num_t *profile, BiGraph
     biclique_profile_out(profile, G, nclique);
 
     /* Free memory */
-    Free(nclique);
+    free(nclique);
 
     return;
 }
